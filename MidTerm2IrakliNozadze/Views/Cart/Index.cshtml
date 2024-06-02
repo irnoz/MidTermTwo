@@ -1,0 +1,47 @@
+@model Cart
+
+@{
+    ViewData["Title"] = "Cart";
+}
+
+<h1>Cart</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Data</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>
+                    @if (item.Data != null)
+                    {
+                        @if (!string.IsNullOrEmpty(item.Data.Color)) { <strong>Color:</strong> @item.Data.Color <br /> }
+                        @if (!string.IsNullOrEmpty(item.Data.Capacity)) { <strong>Capacity:</strong> @item.Data.Capacity <br /> }
+                        @* @if (item.Data.Price.HasValue) { <strong>Price:</strong> $@item.Data.Price.Value <br /> } *@
+                        @if (!string.IsNullOrEmpty(item.Data.Generation)) { <strong>Generation:</strong> @item.Data.Generation <br /> }
+                        @if (item.Data.Year.HasValue) { <strong>Year:</strong> @item.Data.Year.Value <br /> }
+                        @if (!string.IsNullOrEmpty(item.Data.CPUModel)) { <strong>CPU Model:</strong> @item.Data.CPUModel <br /> }
+                        @if (!string.IsNullOrEmpty(item.Data.HardDiskSize)) { <strong>Hard Disk Size:</strong> @item.Data.HardDiskSize <br /> }
+                        @if (!string.IsNullOrEmpty(item.Data.StrapColour)) { <strong>Strap Colour:</strong> @item.Data.StrapColour <br /> }
+                        @if (!string.IsNullOrEmpty(item.Data.CaseSize)) { <strong>Case Size:</strong> @item.Data.CaseSize <br /> }
+                        @if (!string.IsNullOrEmpty(item.Data.Description)) { <strong>Description:</strong> @item.Data.Description <br /> }
+                        @if (!string.IsNullOrEmpty(item.Data.ScreenSize)) { <strong>Screen Size:</strong> @item.Data.ScreenSize <br /> }
+                    }
+                </td>
+                <td>
+                    <form method="post" asp-controller="Cart" asp-action="RemoveFromCart">
+                        <input type="hidden" name="id" value="@item.Id" />
+                        <button type="submit" class="btn btn-danger">Remove</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

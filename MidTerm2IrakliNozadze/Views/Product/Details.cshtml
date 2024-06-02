@@ -1,0 +1,15 @@
+@model Product
+
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<h1>@Model.Name</h1>
+<p>@Model.Data?.Color</p>
+<p>@Model.Data?.Capacity</p>
+<p>@Model.Data?.Price</p>
+<!-- Additional fields as required -->
+<form method="post" asp-action="AddToCart" asp-controller="Product">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <button type="submit">Add to Cart</button>
+</form>

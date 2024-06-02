@@ -1,0 +1,41 @@
+@model List<Product>
+
+@{
+    ViewData["Title"] = "Product Catalog";
+}
+
+<h1>Product Catalog</h1>
+
+<div class="row">
+    @foreach (var product in Model)
+    {
+        <div class="col-md-4">
+            <div class="card mb-4 box-shadow">
+                <div class="card-body">
+                    <h5 class="card-title">@product.Name</h5>
+                    <p class="card-text">
+                        @if (product.Data != null)
+                        {
+                            @if (!string.IsNullOrEmpty(product.Data.Color)) { <strong>Color:</strong> @product.Data.Color <br /> }
+                            @if (!string.IsNullOrEmpty(product.Data.Capacity)) { <strong>Capacity:</strong> @product.Data.Capacity <br /> }
+                            @* @if (product.Data.Price.HasValue) { <strong>Price:</strong> $@product.Data.Price.Value <br /> } *@
+                            @if (!string.IsNullOrEmpty(product.Data.Generation)) { <strong>Generation:</strong> @product.Data.Generation <br /> }
+                            @if (product.Data.Year.HasValue) { <strong>Year:</strong> @product.Data.Year.Value <br /> }
+                            @if (!string.IsNullOrEmpty(product.Data.CPUModel)) { <strong>CPU Model:</strong> @product.Data.CPUModel <br /> }
+                            @if (!string.IsNullOrEmpty(product.Data.HardDiskSize)) { <strong>Hard Disk Size:</strong> @product.Data.HardDiskSize <br /> }
+                            @if (!string.IsNullOrEmpty(product.Data.StrapColour)) { <strong>Strap Colour:</strong> @product.Data.StrapColour <br /> }
+                            @if (!string.IsNullOrEmpty(product.Data.CaseSize)) { <strong>Case Size:</strong> @product.Data.CaseSize <br /> }
+                            @if (!string.IsNullOrEmpty(product.Data.Description)) { <strong>Description:</strong> @product.Data.Description <br /> }
+                            @if (!string.IsNullOrEmpty(product.Data.ScreenSize)) { <strong>Screen Size:</strong> @product.Data.ScreenSize <br /> }
+                        }
+                    </p>
+                    <form method="post" asp-controller="Product" asp-action="AddToCart">
+                        <input type="hidden" name="id" value="@product.Id" />
+                        <button type="submit" class="btn btn-primary">Add to Cart</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+}
+</div>
