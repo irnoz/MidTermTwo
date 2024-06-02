@@ -1,10 +1,10 @@
-@model List<Product>
+@model IEnumerable<Product>
 
 @{
-    ViewData["Title"] = "Product Catalog";
+    ViewData["Title"] = "Products";
 }
 
-<h1>Product Catalog</h1>
+<h2>Products</h2>
 
 <div class="row">
     @foreach (var product in Model)
@@ -16,26 +16,45 @@
                     <p class="card-text">
                         @if (product.Data != null)
                         {
-                            @if (!string.IsNullOrEmpty(product.Data.Color)) { <strong>Color:</strong> @product.Data.Color <br /> }
-                            @if (!string.IsNullOrEmpty(product.Data.Capacity)) { <strong>Capacity:</strong> @product.Data.Capacity <br /> }
-                            @* @if (product.Data.Price.HasValue) { <strong>Price:</strong> $@product.Data.Price.Value <br /> } *@
-                            @if (!string.IsNullOrEmpty(product.Data.Generation)) { <strong>Generation:</strong> @product.Data.Generation <br /> }
-                            @if (product.Data.Year.HasValue) { <strong>Year:</strong> @product.Data.Year.Value <br /> }
-                            @if (!string.IsNullOrEmpty(product.Data.CPUModel)) { <strong>CPU Model:</strong> @product.Data.CPUModel <br /> }
-                            @if (!string.IsNullOrEmpty(product.Data.HardDiskSize)) { <strong>Hard Disk Size:</strong> @product.Data.HardDiskSize <br /> }
-                            @if (!string.IsNullOrEmpty(product.Data.StrapColour)) { <strong>Strap Colour:</strong> @product.Data.StrapColour <br /> }
-                            @if (!string.IsNullOrEmpty(product.Data.CaseSize)) { <strong>Case Size:</strong> @product.Data.CaseSize <br /> }
-                            @if (!string.IsNullOrEmpty(product.Data.Description)) { <strong>Description:</strong> @product.Data.Description <br /> }
-                            @if (!string.IsNullOrEmpty(product.Data.ScreenSize)) { <strong>Screen Size:</strong> @product.Data.ScreenSize <br /> }
+                            <ul>
+                                @if (!string.IsNullOrEmpty(product.Data.Color))
+                                {
+                                    <li>Color: @product.Data.Color</li>
+                                }
+                                @if (!string.IsNullOrEmpty(product.Data.Capacity))
+                                {
+                                    <li>Capacity: @product.Data.Capacity</li>
+                                }
+                                @if (product.Data.Price.HasValue)
+                                {
+                                    <li>Price: @product.Data.Price.Value.ToString("C")</li>
+                                }
+                            </ul>
                         }
                     </p>
-                    <form method="post" asp-controller="Product" asp-action="AddToCart">
-                        <input type="hidden" name="id" value="@product.Id" />
-                        <button type="submit" class="btn btn-primary">Add to Cart</button>
-                    </form>
+                    <button class="btn btn-primary add-to-cart" data-id="@product.Id">Add to Cart</button>
                 </div>
             </div>
         </div>
     }
-}
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('.add-to-cart').click(function() {
+                var id = $(this).data('id');
+                $.ajax({
+                    url: '@Url.Action("AddToCart", "Product")',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function(response) {
+                        if (response.success) {
+                            alert('Product added to cart. Total items: ' + response.cartItemCount);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

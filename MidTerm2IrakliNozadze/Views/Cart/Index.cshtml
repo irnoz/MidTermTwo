@@ -4,44 +4,71 @@
     ViewData["Title"] = "Cart";
 }
 
-<h1>Cart</h1>
+<h2>Cart</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Data</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Items)
-        {
+@if (Model.Items.Any())
+{
+    <table class="table">
+        <thead>
             <tr>
-                <td>@item.Name</td>
-                <td>
-                    @if (item.Data != null)
-                    {
-                        @if (!string.IsNullOrEmpty(item.Data.Color)) { <strong>Color:</strong> @item.Data.Color <br /> }
-                        @if (!string.IsNullOrEmpty(item.Data.Capacity)) { <strong>Capacity:</strong> @item.Data.Capacity <br /> }
-                        @* @if (item.Data.Price.HasValue) { <strong>Price:</strong> $@item.Data.Price.Value <br /> } *@
-                        @if (!string.IsNullOrEmpty(item.Data.Generation)) { <strong>Generation:</strong> @item.Data.Generation <br /> }
-                        @if (item.Data.Year.HasValue) { <strong>Year:</strong> @item.Data.Year.Value <br /> }
-                        @if (!string.IsNullOrEmpty(item.Data.CPUModel)) { <strong>CPU Model:</strong> @item.Data.CPUModel <br /> }
-                        @if (!string.IsNullOrEmpty(item.Data.HardDiskSize)) { <strong>Hard Disk Size:</strong> @item.Data.HardDiskSize <br /> }
-                        @if (!string.IsNullOrEmpty(item.Data.StrapColour)) { <strong>Strap Colour:</strong> @item.Data.StrapColour <br /> }
-                        @if (!string.IsNullOrEmpty(item.Data.CaseSize)) { <strong>Case Size:</strong> @item.Data.CaseSize <br /> }
-                        @if (!string.IsNullOrEmpty(item.Data.Description)) { <strong>Description:</strong> @item.Data.Description <br /> }
-                        @if (!string.IsNullOrEmpty(item.Data.ScreenSize)) { <strong>Screen Size:</strong> @item.Data.ScreenSize <br /> }
-                    }
-                </td>
-                <td>
-                    <form method="post" asp-controller="Cart" asp-action="RemoveFromCart">
-                        <input type="hidden" name="id" value="@item.Id" />
-                        <button type="submit" class="btn btn-danger">Remove</button>
-                    </form>
-                </td>
+                <th>Name</th>
+                <th>Details</th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>
+                        @if (item.Data != null)
+                        {
+                            <ul>
+                                @if (!string.IsNullOrEmpty(item.Data.Color))
+                                {
+                                    <li>Color: @item.Data.Color</li>
+                                }
+                                @if (!string.IsNullOrEmpty(item.Data.Capacity))
+                                {
+                                    <li>Capacity: @item.Data.Capacity</li>
+                                }
+                                @if (item.Data.Price.HasValue)
+                                {
+                                    <li>Price: @item.Data.Price.Value.ToString("C")</li>
+                                }
+                            </ul>
+                        }
+                    </td>
+                    <td>
+                        <button class="btn btn-danger remove-from-cart" data-id="@item.Id">Remove</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Your cart is empty.</p>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('.remove-from-cart').click(function() {
+                var id = $(this).data('id');
+                $.ajax({
+                    url: '@Url.Action("RemoveFromCart", "Cart")',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function(response) {
+                        if (response.success) {
+                            location.reload(); // Refresh the page to update the cart
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -1,25 +1,29 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using MidTerm2IrakliNozadze.Models;
 
-public class CartController : Controller
+namespace MidTerm2IrakliNozadze.Controllers
 {
-    public IActionResult Index()
+    public class CartController : Controller
     {
-        var cart = HttpContext.Session.Get<Cart>("Cart") ?? new Cart();
-        return View(cart);
-    }
-
-    [HttpPost]
-    public IActionResult RemoveFromCart(string id)
-    {
-        var cart = HttpContext.Session.Get<Cart>("Cart") ?? new Cart();
-        var product = cart.Items.FirstOrDefault(p => p.Id == id);
-        if (product != null)
+        public IActionResult Index()
         {
-            cart.Items.Remove(product);
+            var cart = HttpContext.Session.Get<Cart>("Cart") ?? new Cart();
+            return View(cart);
         }
 
-        HttpContext.Session.Set("Cart", cart);
-        return RedirectToAction("Index");
+        [HttpPost]
+        public IActionResult RemoveFromCart(string id)
+        {
+            var cart = HttpContext.Session.Get<Cart>("Cart") ?? new Cart();
+            var product = cart.Items.FirstOrDefault(p => p.Id == id);
+            if (product != null)
+            {
+                cart.Items.Remove(product);
+            }
+
+            HttpContext.Session.Set("Cart", cart);
+            return Json(new { success = true, cartItemCount = cart.Items.Count });
+        }
     }
 }

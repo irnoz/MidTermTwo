@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/noza/iliauni/aspNet/MidTerm2IrakliNozadze/MidTerm2IrakliNozadze/MidTerm2IrakliNozadze.csproj",
+      "projectUniqueName": "/Users/noza/iliauni/aspNet/MidTerm2WithAjaxIrakliNozadze/MidTerm2IrakliNozadze/MidTerm2IrakliNozadze.csproj",
       "projectName": "MidTerm2IrakliNozadze",
-      "projectPath": "/Users/noza/iliauni/aspNet/MidTerm2IrakliNozadze/MidTerm2IrakliNozadze/MidTerm2IrakliNozadze.csproj",
+      "projectPath": "/Users/noza/iliauni/aspNet/MidTerm2WithAjaxIrakliNozadze/MidTerm2IrakliNozadze/MidTerm2IrakliNozadze.csproj",
       "packagesPath": "/Users/noza/.nuget/packages/",
-      "outputPath": "/Users/noza/iliauni/aspNet/MidTerm2IrakliNozadze/MidTerm2IrakliNozadze/obj/",
+      "outputPath": "/Users/noza/iliauni/aspNet/MidTerm2WithAjaxIrakliNozadze/MidTerm2IrakliNozadze/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/noza/.nuget/NuGet/NuGet.Config"

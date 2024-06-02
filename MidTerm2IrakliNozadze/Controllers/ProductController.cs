@@ -2,35 +2,44 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text.Json;
+using MidTerm2IrakliNozadze.Models;
 
-public class ProductController : Controller
+namespace MidTerm2IrakliNozadze.Controllers
 {
-    private readonly ProductService _productService;
-
-    public ProductController(ProductService productService)
+    public class ProductController : Controller
     {
-        _productService = productService;
-    }
+        private readonly ProductService _productService;
 
-    public async Task<IActionResult> Index()
-    {
-        var products = await _productService.GetProductsAsync();
-        return View(products);
-    }
-
-    [HttpPost]
-    public IActionResult AddToCart(string id)
-    {
-        var cart = HttpContext.Session.Get<Cart>("Cart") ?? new Cart();
-        var product = cart.Items.FirstOrDefault(p => p.Id == id);
-        if (product == null)
+        public ProductController(ProductService productService)
         {
-            var productService = new ProductService(new HttpClient());
-            product = productService.GetProductsAsync().Result.FirstOrDefault(p => p.Id == id);
-            cart.Items.Add(product);
+            _productService = productService;
         }
 
-        HttpContext.Session.Set("Cart", cart);
-        return RedirectToAction("Index");
+        public async Task<IActionResult> Index()
+        {
+            var products = await _productService.GetProductsAsync();
+            return View(products);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddToCart(string id)
+        {
+            var cart = HttpContext.Session.Get<Cart>("Cart") ?? new Cart();
+            var product = cart.Items.FirstOrDefault(p => p.Id == id);
+            if (product == null)
+            {
+                var products = await _productService.GetProductsAsync();
+                product = products.FirstOrDefault(p => p.Id == id);
+                if (product != null)
+                {
+                    cart.Items.Add(product);
+                }
+            }
+
+            HttpContext.Session.Set("Cart", cart);
+            return Json(new { success = true, cartItemCount = cart.Items.Count });
+        }
     }
 }
